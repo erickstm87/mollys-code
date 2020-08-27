@@ -19,8 +19,6 @@ d = 0     #SETS PWM AT 0, MOTOR SPEED 0
 
 m.start(d)   #STARTS PWM1
 n.start(d)   #STARTS PWM2
-
-
 # Molly setup looks fine but I also don't really know much about GPIO. 
 
 try:  # Why is this in a try statement? What do you want done if it throws an error? 
@@ -33,14 +31,18 @@ try:  # Why is this in a try statement? What do you want done if it throws an er
                 n.ChangeDutyCycle(d)
                 time.sleep(.075)
         elif (GPIO.input(40) == 0) :   #IF BUTTON IS NOT PUSHED,           INCREMENT SPEED NEGATIVE
-            if d>4:
-                d=d-5
-                print (d)
+            if d > 4:
+                d -= 5
+                print(d)
                 m.ChangeDutyCycle(d)
                 n.ChangeDutyCycle(d)
                 time.sleep(.075)
 
-finally: #FINAL CLEAN-UP
+# How is this finally getting reached? Seems like you have two scenarios accounted for and it will never get here
+finally: #FINAL CLEAN-UP  
   GPIO.cleanup(); m.stop(); n.stop()
 
  
+# Ok so most of this looks ok. Do you want to have some sort of safeguard for the value of d? what happens if d is equal to -99999999999999999999? 
+# Also what do you want to happen if d is greater than 96? So if the button is pushed and d is 105 what do you expect to happen? it will never enter your elif statement as long as they keep the button pushed? Maybe you want to reset it if d is greater than 96?
+# Lastly wanted to remphasize why you have a try/finally I don't see any way this finally statement could get hit.
